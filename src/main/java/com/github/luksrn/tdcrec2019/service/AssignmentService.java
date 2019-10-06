@@ -4,9 +4,11 @@ import com.github.luksrn.tdcrec2019.dominio.Assignment;
 import com.github.luksrn.tdcrec2019.dominio.Course;
 import com.github.luksrn.tdcrec2019.dominio.Email;
 import com.github.luksrn.tdcrec2019.dominio.Student;
+import com.github.luksrn.tdcrec2019.dominio.event.AssignmentCreated;
 import com.github.luksrn.tdcrec2019.repository.AssignmentRepository;
 import com.github.luksrn.tdcrec2019.repository.CourseRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -18,8 +20,7 @@ import java.util.Set;
 public class AssignmentService {
 
     private AssignmentRepository assignmentRepository;
-    private EmailService emailService;
-    private CourseRepository courseRepository;
+    private ApplicationEventPublisher publisher;
 
     @Transactional
     public Assignment create(final Course course, final Assignment assignment){
@@ -27,14 +28,7 @@ public class AssignmentService {
         assignment.setCourse(course);
         assignmentRepository.save(assignment);
 
-        // course#getStudents is Lazy, so...
-        final Set<Student> students = courseRepository.findStudents(course);
-        students.forEach( student ->  {
-            final Email email = new Email(student.getEmail(),
-                    "New assignment created '" + assignment.getTitle() +"'",
-                            assignment.getInstructions());
-            emailService.send(email);
-        });
+        publisher.publishEvent(new AssignmentCreated(assignment));
 
         return assignment;
     }
