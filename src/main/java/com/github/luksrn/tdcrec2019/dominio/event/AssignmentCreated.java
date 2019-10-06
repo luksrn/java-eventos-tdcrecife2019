@@ -4,6 +4,6 @@ import com.github.luksrn.tdcrec2019.dominio.Assignment;
 import lombok.Value;
 
 @Value
-public class AssignmentCreated {
+public final class AssignmentCreated {
     private Assignment assignment;
 }

@@ -9,6 +9,7 @@ import com.github.luksrn.tdcrec2019.service.EmailService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.util.Set;
@@ -20,7 +21,7 @@ public class NotifyAssignmentToStudentsListener {
     private EmailService emailService;
     private CourseRepository courseRepository;
 
-    @TransactionalEventListener
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT) // default
     public void handle(AssignmentCreated event){
         Assignment assignment = event.getAssignment();
         // course#getStudents is Lazy, so...
