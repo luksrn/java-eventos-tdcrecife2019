@@ -5,7 +5,7 @@ import lombok.Value;
 import java.time.Instant;
 
 @Value
-public class CreateAssignmentRequest {
+public final class CreateAssignmentRequest {
     private String title;
     private String instructions;
     private Instant due;
