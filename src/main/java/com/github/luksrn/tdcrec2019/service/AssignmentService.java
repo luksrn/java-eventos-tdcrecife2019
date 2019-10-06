@@ -18,9 +18,7 @@ import java.util.Set;
 public class AssignmentService {
 
     private AssignmentRepository assignmentRepository;
-
     private EmailService emailService;
-
     private CourseRepository courseRepository;
 
     @Transactional

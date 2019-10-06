@@ -2,6 +2,7 @@ package com.github.luksrn.tdcrec2019.dominio;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -15,7 +16,7 @@ import java.time.Instant;
 public class Assignment {
     @Id @GeneratedValue
     private Long id;
-    @NotEmpty
+    @Column(nullable = false)
     private String title;
     private String instructions;
     private Instant due;
