@@ -103,4 +103,34 @@ public class AssignmentControllerTest {
         softly.assertAll();
 
     }
+
+
+    @Test
+    public void testThatAssignmentCreationShouldNotSendEmailWhenFailure() throws Exception {
+
+        // Given
+        doNothing().when(emailService).send(emailCaptor.capture());
+        CreateAssignmentRequest payload = new CreateAssignmentRequest(
+                null, null, null);
+
+        //when
+        MvcResult mvcResult = mvc.perform(post("/course/{courseId}/assignment/create", 1L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(payload))
+        ).andReturn();
+
+        // then
+        Course course = new Course();
+        course.setId(1L);
+        List<Assignment> assignments = assignmentService.findAllByCourse(course);
+
+        SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(mvcResult.getResponse().getStatus())
+                .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        softly.assertThat(assignments).isEmpty();
+        softly.assertThat(mockingDetails(emailService).getInvocations()).isEmpty();
+        softly.assertAll();
+    }
+
+
 }
