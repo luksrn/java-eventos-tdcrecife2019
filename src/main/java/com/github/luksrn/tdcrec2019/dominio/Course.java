@@ -30,4 +30,7 @@ public class Course {
             inverseJoinColumns = @JoinColumn( name="student_id"))
     private Set<Student> students;
 
+    public Course(){}
+
+    public Course(Long id) { this.id = id;}
 }
