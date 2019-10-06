@@ -20,7 +20,7 @@ public class NotifyAssignmentToStudentsListener {
     private EmailService emailService;
     private CourseRepository courseRepository;
 
-    @EventListener
+    @TransactionalEventListener
     public void handle(AssignmentCreated event){
         Assignment assignment = event.getAssignment();
         // course#getStudents is Lazy, so...
