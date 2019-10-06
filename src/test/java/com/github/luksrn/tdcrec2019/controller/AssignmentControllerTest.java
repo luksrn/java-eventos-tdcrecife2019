@@ -81,15 +81,12 @@ public class AssignmentControllerTest {
         ).andReturn();
 
         // then
-        Course course = new Course();
-        course.setId(1L);
-        List<Assignment> assignments = assignmentService.findAllByCourse(course);
-
         SoftAssertions softly = new SoftAssertions();
 
         softly.assertThat(mvcResult.getResponse().getStatus())
                 .isEqualTo(HttpStatus.CREATED.value());
 
+        List<Assignment> assignments = assignmentService.findAllByCourse(new Course(1L));
         softly.assertThat(assignments)
                 .hasSize(1)
                 .flatExtracting(Assignment::getTitle, Assignment::getInstructions)
@@ -120,14 +117,10 @@ public class AssignmentControllerTest {
         ).andReturn();
 
         // then
-        Course course = new Course();
-        course.setId(1L);
-        List<Assignment> assignments = assignmentService.findAllByCourse(course);
-
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(mvcResult.getResponse().getStatus())
                 .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value());
-        softly.assertThat(assignments).isEmpty();
+        softly.assertThat(assignmentService.findAllByCourse(new Course(1L))).isEmpty();
         softly.assertThat(mockingDetails(emailService).getInvocations()).isEmpty();
         softly.assertAll();
     }
