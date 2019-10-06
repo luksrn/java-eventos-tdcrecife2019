@@ -70,7 +70,6 @@ public class AssignmentControllerTest {
         Email emailToBenjamin = new Email("benjamin@email.com", "New assignment created 'Spring Application Events'", "TDC talk about Spring event");
         Email emailToZooey = new Email("zoey@email.com", "New assignment created 'Spring Application Events'", "TDC talk about Spring event");
 
-
         CreateAssignmentRequest payload = new CreateAssignmentRequest(
                 "Spring Application Events", "TDC talk about Spring event", Instant.now());
 
@@ -98,7 +97,6 @@ public class AssignmentControllerTest {
                 .containsExactlyInAnyOrder(emailToBenjamin, emailToZooey);
 
         softly.assertAll();
-
     }
 
 
@@ -124,5 +122,4 @@ public class AssignmentControllerTest {
         softly.assertThat(mockingDetails(emailService).getInvocations()).as("Shouldn't interact with EmailService").isEmpty();
         softly.assertAll();
     }
-
 }

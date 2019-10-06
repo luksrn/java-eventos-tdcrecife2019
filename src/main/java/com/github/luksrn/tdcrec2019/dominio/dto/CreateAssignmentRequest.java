@@ -6,7 +6,7 @@ import javax.validation.constraints.NotEmpty;
 import java.time.Instant;
 
 @Value
-public class CreateAssignmentRequest {
+public final class CreateAssignmentRequest {
     @NotEmpty
     private String title;
     private String instructions;
