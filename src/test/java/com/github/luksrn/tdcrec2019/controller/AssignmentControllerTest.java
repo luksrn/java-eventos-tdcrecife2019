@@ -119,11 +119,10 @@ public class AssignmentControllerTest {
         // then
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(mvcResult.getResponse().getStatus())
-                .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value());
+                .isEqualTo(HttpStatus.BAD_REQUEST.value());
         softly.assertThat(assignmentService.findAllByCourse(new Course(1L))).isEmpty();
-        softly.assertThat(mockingDetails(emailService).getInvocations()).isEmpty();
+        softly.assertThat(mockingDetails(emailService).getInvocations()).as("Shouldn't interact with EmailService").isEmpty();
         softly.assertAll();
     }
-
 
 }
