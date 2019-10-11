@@ -2,7 +2,7 @@ INSERT INTO student (id,name, email) VALUES
   (1, 'Benjamin', 'benjamin@email.com'),
   (2, 'Zoey', 'zoey@email.com'),
   (3, 'Peggy', 'peggy@email.com'),
-  (4, 'Peggy', 'peggy@email.com');
+  (4, 'Jhonny', 'jhonny@email.com');
 
 insert into course (id, title) values (1, 'Spring');
 insert into course (id, title) values (2, 'TDC talks');
