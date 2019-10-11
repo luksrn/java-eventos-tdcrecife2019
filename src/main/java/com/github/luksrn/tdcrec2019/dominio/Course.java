@@ -1,6 +1,7 @@
 package com.github.luksrn.tdcrec2019.dominio;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,6 +16,7 @@ import java.util.Set;
 
 @Entity
 @Data
+@ToString(exclude = "students")
 @NamedEntityGraph(name = "Course.students",
         attributeNodes = @NamedAttributeNode("students"))
 public class Course {

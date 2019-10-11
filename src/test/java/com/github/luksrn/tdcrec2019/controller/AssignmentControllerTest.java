@@ -7,16 +7,14 @@ import com.github.luksrn.tdcrec2019.dominio.Email;
 import com.github.luksrn.tdcrec2019.dominio.dto.CreateAssignmentRequest;
 import com.github.luksrn.tdcrec2019.service.AssignmentService;
 import com.github.luksrn.tdcrec2019.service.EmailService;
-import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
@@ -24,22 +22,14 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.ResultActions;
-
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mockingDetails;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -62,7 +52,7 @@ public class AssignmentControllerTest {
     private ArgumentCaptor<Email> emailCaptor;
 
     @Test
-    public void testAssignmentCreation() throws Exception {
+    public void testAssignmentCreationThatSendsEmailToStudents() throws Exception {
 
         // Given
         doNothing().when(emailService).send(emailCaptor.capture());
@@ -109,7 +99,7 @@ public class AssignmentControllerTest {
                 null, null, null);
 
         //when
-        MvcResult mvcResult = mvc.perform(post("/course/{courseId}/assignment/create", 1L)
+        MvcResult mvcResult = mvc.perform(post("/course/{courseId}/assignment/create", 2L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(payload))
         ).andReturn();
@@ -118,7 +108,7 @@ public class AssignmentControllerTest {
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(mvcResult.getResponse().getStatus())
                 .isEqualTo(HttpStatus.BAD_REQUEST.value());
-        softly.assertThat(assignmentService.findAllByCourse(new Course(1L))).isEmpty();
+        softly.assertThat(assignmentService.findAllByCourse(new Course(2L))).isEmpty();
         softly.assertThat(mockingDetails(emailService).getInvocations()).as("Shouldn't interact with EmailService").isEmpty();
         softly.assertAll();
     }
